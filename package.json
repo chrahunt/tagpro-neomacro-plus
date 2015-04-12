@@ -21,6 +21,7 @@
     "macro",
     "userscript"
   ],
-  "author": "snaps",
-  "license": "MIT"
+  "author": "Chris Hunt <chrahunt@gmail.com>",
+  "license": "MIT",
+  "repository": "chrahunt/tagpro-neomacro-plus"
 }
