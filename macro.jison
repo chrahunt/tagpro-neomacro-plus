@@ -35,12 +35,15 @@
 %% /* language grammar */
 
 expression
-    : statement EOF
+    : statement EOF {return $1;}
     ;
 
 statement
-    : '/' fc_callout {return $2;}
-    | '+' pup_grab_callout {return $2;}
+    : '/' fc_callout {$$ = $2;}
+    | '/' '-' fc_callout_lane {$$ = $3;}
+    | '+' pup_grab_callout {$$ = $2;}
+    | '+' '*' pup_respawn_callout {$$ = $3;}
+    | '-' own_base_status {$$ = $2;}
     ;
 
 /* Flag carrier positions. */
@@ -54,6 +57,17 @@ fc_callout
     %}
     ;
 
+/* Flag carrier position in lane/area. */
+fc_callout_lane
+    : num %{
+        $$ = {
+            type: "fc_position_lane",
+            target: "enemy",
+            lane: $1
+        };
+    %}
+    ;
+
 /* Powerup grab callout. */
 pup_grab_callout
     : pronoun powerup dir number %{
@@ -63,6 +77,26 @@ pup_grab_callout
             what: $2,
             where: $3,
             when: $4
+        };
+    %}
+    ;
+
+/* Powerup respawn callout. */
+pup_respawn_callout
+    : dir %{
+        $$ = {
+            type: "pup_respawn",
+            where: $1
+        };
+    %}
+    ;
+
+/* Number of enemies in base. */
+own_base_status
+    : num %{
+        $$ = {
+            type: "base_status",
+            num: $1
         };
     %}
     ;

@@ -4,7 +4,7 @@ var jison = require("jison");
 
 // Get grammar and generate parser.
 var grammar = fs.readFileSync("macro.jison", "utf8");
-var parser  = jison.Generator(grammar, {type: "lr0"});
+var parser  = jison.Generator(grammar, {type: "lalr"});
 
 // Get initial possible vals.
 var firsts;

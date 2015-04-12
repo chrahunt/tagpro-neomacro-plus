@@ -2,7 +2,7 @@
 // @name          TagPro Neomacro+
 // @namespace     http://reddit.com/user/snaps_
 // @description   Better macros for a brighter future.
-// @require       https://gist.github.com/chrahunt/4843f0258c516882eea0/raw/8d5f273ca484e3c480ec0fde70cdc5861344388a/loopback.user.js
+// @require       https://gist.github.com/chrahunt/4843f0258c516882eea0/raw/loopback.user.js
 // @include       http://tagpro-*.koalabeast.com:*
 // @include       http://maptest*.newcompte.fr:*
 // @license       MIT
@@ -46,7 +46,8 @@ window.parseMacro = function(str) {
 // generated without prior knowledge.
 var keyCodes = {
   111: '/',
-  107: '+'
+  107: '+',
+  109: '-'
 };
 
 window.validFirst = function(keyCode) {
@@ -186,7 +187,10 @@ function script() {
 
   var Templates = {
     "fc_position": "{{loc|dir|dbl}} Enemy FC is {{loc|expand}} {{loc|dir|dbl}}",
-    "pup_grabbed": "{{who|expand|capitalize}} got {{what|expand}} on {{where|expand}} @ :{{when}}"
+    "pup_grabbed": "{{who|expand|capitalize}} got {{what|expand}} on {{where|expand}} @ :{{when}}",
+    "fc_position_lane": "Enemy FC is {{lane}}.",
+    "pup_respawn": "{{where|expand|capitalize}} powerup is respawning soon.",
+    "base_status": "Number of enemies in base: {{num}}"
   };
 
   // Given text from within a replacement, parse it.
