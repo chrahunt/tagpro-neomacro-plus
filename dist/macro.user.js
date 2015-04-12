@@ -1,5 +1,5 @@
 // ==UserScript==
-// @name          TagPro Neomacro+
+// @name          TagPro Neomacro Plus
 // @namespace     http://reddit.com/user/snaps_
 // @description   Better macros for a brighter future.
 // @require       https://gist.github.com/chrahunt/4843f0258c516882eea0/raw/loopback.user.js
@@ -7,10 +7,10 @@
 // @include       http://maptest*.newcompte.fr:*
 // @license       MIT
 // @author        snaps
-// @version       0.1
+// @version       0.1.0
 // @run-at        document-start
 // ==/UserScript==
- 
+
 // Userscript functions.
 (function(window, document) {
 

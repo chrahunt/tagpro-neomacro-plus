@@ -1,0 +1,26 @@
+{
+  "name": "tagpro-neomacro-plus",
+  "version": "0.1.0",
+  "description": "Better macros for the game TagPro.",
+  "directories": {
+    "test": "test"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "gulp": "^3.8.11",
+    "gulp-concat": "^2.5.2",
+    "gulp-jison": "git://github.com/chrahunt/gulp-jison.git",
+    "gulp-rename": "^1.2.2",
+    "jison": "^0.4.15"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "tagpro",
+    "macro",
+    "userscript"
+  ],
+  "author": "snaps",
+  "license": "MIT"
+}

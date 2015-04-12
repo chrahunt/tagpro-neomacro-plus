@@ -1,3 +1,4 @@
+/* Specified the grammar for the macro input. */
 /* lexical grammar */
 %lex
 %%
