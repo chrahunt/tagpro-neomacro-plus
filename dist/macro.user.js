@@ -2,7 +2,8 @@
 // @name          TagPro Neomacro Plus
 // @namespace     http://reddit.com/user/snaps_
 // @description   Better macros for a brighter future.
-// @require       https://gist.github.com/chrahunt/4843f0258c516882eea0/raw/loopback.user.js
+// @require       file:///C:/Users/Christopher/Documents/Programming/Projects/TagPro%20Macros/dist/parser.js
+// @downloadURL   file:///C:/Users/Christopher/Documents/Programming/Projects/TagPro%20Macros/dist/macro.user.js
 // @include       http://tagpro-*.koalabeast.com:*
 // @include       http://maptest*.newcompte.fr:*
 // @license       MIT
@@ -19,10 +20,10 @@
 var addToPage = function() {
   // This dummy input will handle macro keypresses
   var btn = document.createElement("input");
-  //btn.style.opacity = 0;
-  //btn.style.position = "absolute";
-  //btn.style.top = "-100px";
-  //btn.style.left = "-100px";
+  btn.style.opacity = 0;
+  btn.style.position = "absolute";
+  btn.style.top = "-100px";
+  btn.style.left = "-100px";
   btn.id = "macro-handler";
   document.body.appendChild(btn);
 
@@ -129,8 +130,40 @@ function script() {
   }
 
   // For debugging.
-  function chat(message) {
-    console.log(message);
+  //function chat(message) {
+  //  console.log(message);
+  //}
+
+  /**
+   * Send a message.
+   * @param {object} chatMessage - The message information. It has
+   *   properties `text` and `global` corresponding to the message
+   *   to send and whether it should go to everyone (as opposed to
+   *   just the user's own team.)
+   * @param {boolean} group - Whether this message should be sent
+   *   to the group.
+   */
+  // 
+  var lastMessage = 0;
+  function chat(chatMessage, group) {
+    if (typeof group == "undefined") group = false;
+    var now = Date.now();
+    var timeDiff = now - lastMessage;
+    if (timeDiff > messageLimit) {
+      if (!group) {
+        tagpro.socket.emit("chat", {
+          message: messagePrefix + chatMessage.text,
+          toAll: chatMessage.global
+        });
+      } else {
+        tagpro.group.socket.emit("chat", chatMessage);
+      }
+      lastMessage = Date.now();
+    } else if (timeDiff >= 0) {
+      setTimeout(function() {
+        chat(chatMessage, group);
+      }, messageLimit - timeDiff);
+    }
   }
 
   var Symbols = {};

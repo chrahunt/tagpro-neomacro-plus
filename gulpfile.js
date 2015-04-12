@@ -5,6 +5,7 @@ var template = require("gulp-template");
 var jison = require("gulp-jison");
 var package_info = require("./package.json");
 var url = require("url");
+var fileUrl = require("file-url");
 
 // Get the URL of the raw file as it will be available at the specified
 // Github repository on the master branch.
@@ -12,6 +13,11 @@ function getGithubRawURL(repo, filePath) {
   var githubRawBase = "https://raw.githubusercontent.com";
   return url.resolve([githubRawBase, repo, "master"].join("/") + "/",
     filePath);
+}
+
+// Get URL of file of the form "file:///C:/..."
+function getFileURL(filePath) {
+
 }
 
 // Build parser.
@@ -23,6 +29,16 @@ gulp.task("jison", function() {
     }))
     .pipe(rename("parser.js"))
     .pipe(gulp.dest("./dist"));
+});
+
+gulp.task("jison-dev", function() {
+  return gulp.src("./src/grammar.jison")
+    .pipe(jison({
+      type: "lalr",
+      moduleName: "Macro"
+    }))
+    .pipe(rename("parser.js"))
+    .pipe(gulp.dest("./debug"));
 });
 
 // Build userscript.
@@ -37,8 +53,15 @@ gulp.task("build", ["jison"], function() {
     .pipe(gulp.dest("./dist"));
 });
 
-gulp.task("build-dev", ["jison"], function() {
-
+gulp.task("build-dev", ["jison-dev"], function() {
+  return gulp.src(["./src/header.user.js", "./src/macro.js"])
+    .pipe(concat("macro.user.js"))
+    .pipe(template({
+      version: package_info.version,
+      parser: fileUrl('./dist/parser.js'),
+      updateUrl: fileUrl('./debug/macro.user.js')
+    }))
+    .pipe(gulp.dest("./debug"));
 });
 
 gulp.task("default", ["build"]);
