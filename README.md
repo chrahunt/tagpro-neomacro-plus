@@ -44,39 +44,39 @@ Throughout, keep in mind the numpad layout
 
 ### Sentences:
 
-1. Enemy Flag Carrier Locations
-   Format: `/` `[direction]`
-   Mnemonic: The `/` looks like a flagpole.
-   **Example**
-   Input: `/` `2`
+1. Enemy Flag Carrier Locations  
+   Format: `/` `[direction]`  
+   Mnemonic: The `/` looks like a flagpole.  
+   **Example**  
+   Input: `/` `2`  
    Output: "&#8659;&#8659; Enemy Flag carrier is bottom. &#8659;&#8659;"
 
-2. Enemy Flag Carrier Location (lane):
-   Format: `/` `-` `[number(1)]`
-   Mnemonic: `/` already corresponds to the flag carrier, and `-` is reminiscent of a 'lane', which this callout generally corresponds to (e.g. on Boombox, Velocity, etc).
-   **Example**
-   Input: `/` `-` `1`
+2. Enemy Flag Carrier Location (lane):  
+   Format: `/` `-` `[number(1)]`  
+   Mnemonic: `/` already corresponds to the flag carrier, and `-` is reminiscent of a 'lane', which this callout generally corresponds to (e.g. on Boombox, Velocity, etc).  
+   **Example**  
+   Input: `/` `-` `1`  
    Output: "Enemy FC is 1."
 
-3. Powerup grabs
-   Format: `+` `[pronoun]` `[powerup]` `[direction]` `[time]`
-   Mnemonic: Powerups give a "boost" to players and the order of the required items corresponds to the "Who", "What", "Where", "When" subset of the [Five Ws](http://en.wikipedia.org/wiki/Five_Ws).
-   **Example**
-   Input: `+` `2` `8` `5` `23`
+3. Powerup grabs  
+   Format: `+` `[pronoun]` `[powerup]` `[direction]` `[time]`  
+   Mnemonic: Powerups give a "boost" to players and the order of the required items corresponds to the "Who", "What", "Where", "When" subset of the [Five Ws](http://en.wikipedia.org/wiki/Five_Ws).  
+   **Example**  
+   Input: `+` `2` `8` `5` `23`  
    Output: "I got juke juice on middle @ :23."
 
-4. Powerup respawns
-   Format: `+` `*` `[direction]`
-   Mnemonic: `+` already corresponds to powerups and the star can indicate something "heavenly" or ethereal, which respawning falls into.
-   **Example**
-   Input: `+` `*` `1`
+4. Powerup respawns  
+   Format: `+` `*` `[direction]`  
+   Mnemonic: `+` already corresponds to powerups and the star can indicate something "heavenly" or ethereal, which respawning falls into.  
+   **Example**  
+   Input: `+` `*` `1`  
    Output: "Lower left powerup is respawning soon."
 
-5. Enemies in base
-   Format: `-` `[number(1)]`
-   Mnemonic: `-` because enemies in base is usually negative.
-   **Example**
-   Input: `-` `2`
+5. Enemies in base  
+   Format: `-` `[number(1)]`  
+   Mnemonic: `-` because enemies in base is usually negative.  
+   **Example**  
+   Input: `-` `2`  
    Output: "Number of enemies in base: 2"
 
 ### Parts:
