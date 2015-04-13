@@ -2,7 +2,7 @@
 (function(window, document) {
 
 // Run provided function when body is present.
-var runOnBody = function(fn) {
+function runOnBody(fn) {
   if (document.body) {
       fn();
   } else {
@@ -10,7 +10,7 @@ var runOnBody = function(fn) {
       runOnBody(fn);
     }, 150);
   }
-};
+}
 
 function runOnTagpro(fn) {
   if (typeof tagpro !== 'undefined') {
@@ -50,6 +50,23 @@ runOnBody(function() {
     showInfo("TNM+: TagPro NeoMacro Plus Loaded!");
   });
 });
+
+// Checks for macro inputs associated with TagPro NeoMacro and
+// Watball's macro generator.
+var conflictCheck = setInterval(function() {
+  var input = document.getElementById("macrohandlerbutton");
+  if (input !== null) {
+    // Clean up changes.
+    document.removeEventListener('keydown', documentKeydown, false);
+    var thisInput = document.getElementById("macro-handler");
+    thisInput.removeEventListener('keydown', keydownHandler, false);
+    thisInput.remove();
+    // Add listener to existing input, assumes focus is handled in
+    // other script.
+    input.addEventListener('keydown', keydownHandler, false);
+    clearInterval(conflictCheck);
+  }
+}, 200);
 
 // Given a string of keys pressed, parse it into an object to be
 // turned into a message, or throw an exception if invalid.

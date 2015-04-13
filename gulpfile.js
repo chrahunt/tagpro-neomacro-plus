@@ -1,11 +1,14 @@
 var gulp = require("gulp");
-var rename = require("gulp-rename");
 var concat = require("gulp-concat");
-var template = require("gulp-template");
+var git = require("gulp-git");
 var jison = require("gulp-jison");
-var package_info = require("./package.json");
-var url = require("url");
+var rename = require("gulp-rename");
+var template = require("gulp-template");
+
 var fileUrl = require("file-url");
+var url = require("url");
+
+var package_info = require("./package.json");
 
 // Get the URL of the raw file as it will be available at the specified
 // Github repository on the master branch.
@@ -13,11 +16,6 @@ function getGithubRawURL(repo, filePath) {
   var githubRawBase = "https://raw.githubusercontent.com";
   return url.resolve([githubRawBase, repo, "master"].join("/") + "/",
     filePath);
-}
-
-// Get URL of file of the form "file:///C:/..."
-function getFileURL(filePath) {
-
 }
 
 // Build parser.
@@ -47,8 +45,8 @@ gulp.task("build", ["jison"], function() {
     .pipe(concat("macro.user.js"))
     .pipe(template({
       version: package_info.version,
-      parser: getGithubRawURL(package_info.repository, './dist/parser.js'),
-      updateUrl: getGithubRawURL(package_info.repository, './dist/macro.user.js')
+      parser: getGithubRawURL(package_info.repository, "./dist/parser.js"),
+      updateUrl: getGithubRawURL(package_info.repository, "./dist/macro.user.js")
     }))
     .pipe(gulp.dest("./dist"));
 });
@@ -58,8 +56,8 @@ gulp.task("build-dev", ["jison-dev"], function() {
     .pipe(concat("macro.user.js"))
     .pipe(template({
       version: package_info.version,
-      parser: fileUrl('./dist/parser.js'),
-      updateUrl: fileUrl('./debug/macro.user.js')
+      parser: fileUrl("./dist/parser.js"),
+      updateUrl: fileUrl("./debug/macro.user.js")
     }))
     .pipe(gulp.dest("./debug"));
 });
