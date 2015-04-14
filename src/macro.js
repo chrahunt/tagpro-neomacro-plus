@@ -47,7 +47,7 @@ runOnBody(function() {
   btn.addEventListener('keydown', keydownHandler, false);
   document.addEventListener('keydown', documentKeydown, false);
   runOnChat(function() {
-    showInfo("TNM+: TagPro NeoMacro Plus Loaded!");
+    showInfo("TagPro Neomacro Plus Loaded!");
   });
 });
 
@@ -148,53 +148,60 @@ function documentKeydown(event) {
 var lastKey = 0;
 // Time to wait after last keypress before trying macro, maximum time before
 // macro will go after pressing keys.
-var keypressLimit = 2e3;
+var keypressLimit = 3e3;
 
 // The . key on the numpad.
 var resetKey = 110;
 
 // Keys pressed.
 var keys = [];
-var macroRunner;
-
+var clearKeys;
 function keydownHandler(event) {
   if (controlsDisabled()) return;
-  // If no sequence has started and this doesn't match a valid start
-  // token, then disregard.
-  if (keys.length === 0 && !validFirst(event.keyCode)) return;
-  if (!validKey(event.keyCode)) return;
-  // Remove existing macro parsing to be called if it exists.
-  if (macroRunner) {
-    clearTimeout(macroRunner);
-  }
-
   // Reset key in case user presses incorrect key.
   if (event.keyCode == resetKey) {
     keys = [];
-    showInfo("TNM+: Key combination reset! You can restart your macro now.");
+    showInfo("Key combination reset! You can restart your macro now.");
+    if (clearKeys) {
+      clearTimeout(clearKeys);
+    }
     return;
   }
+
+  // If no sequence has started and this doesn't match a valid start
+  // token, then disregard.
+  if (keys.length === 0 && !validFirst(event.keyCode)) return;
+  
+  // Ignore irrelevant keys and don't allow them to interfere with the
+  // macro key sequence.
+  if (!validKey(event.keyCode)) return;
+  // Remove existing macro parsing to be called if it exists.
+  if (clearKeys) {
+    clearTimeout(clearKeys);
+  }
+
   event.preventDefault();
   event.stopPropagation();
 
   keys.push(event.keyCode);
 
   // Parse already-pressed keys if no other keys come in.
-  macroRunner = setTimeout(function() {
-    try {
-      var result = parseMacro(keys.join(" "));
-      var message = {
-        text: parseMessage(result),
-        global: false
-      };
-      chat(message);
-    } catch(e) {
-      showInfo("TNM+: Error, try your macro again.");
-      console.debug("Parse error: " + e);
-    } finally {
+  try {
+    var result = parseMacro(keys.join(" "));
+    var message = {
+      text: parseMessage(result),
+      global: false
+    };
+    chat(message);
+    keys = [];
+  } catch(e) {
+    //console.debug("Parse error: " + e);
+    // Not ready, clear keys after time period.
+    clearKeys = setTimeout(function() {
+      showInfo("Try your macro again.");
       keys = [];
-    }
-  }, keypressLimit);
+    }, keypressLimit);
+  }
 }
 
 /**
@@ -236,7 +243,7 @@ function showInfo(message) {
     tagpro.socket.emit("local:chat", {
       to: "all",
       from: null,
-      message: message
+      message: "TNP: " + message
     });
   }
 }

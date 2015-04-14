@@ -111,7 +111,7 @@ This section specifies the parts as referenced in the sentences above. Where the
    Number that can be typed on the numpad. `n` indicates how many digits the number should have.
 
 5. Time - `[time]`
-   Indicates a time (seconds). Equivalent to `[number(1)]` or `[number(2)]`.
+   Indicates a time (seconds). Equivalent to `[number(2)]`.
 
 ## Compatibility
 
@@ -128,6 +128,8 @@ The macros are specified using a grammar (in `src/grammar.jison`) from which a p
     107 98 104 101 98 99
 
 which corresponds to the "Powerup Grabs" example above where the keys pressed are `+` `2` `8` `5` `23`. The parser transforms the input into an object which contains the information relevant to generate the output message from the templates corresponding to each sentence. The template sentences are parsed after the object is retrieved (todo: use jison for template sentence construction) and turned into the actual text used for chat.
+
+The macros are limited in that optional trailing parameters aren't supported. This is so that messages can be sent the first chance they match, but restricts the possible macros that can be used. If needed in the future this may be changed.
 
 ### Parser Objects
 

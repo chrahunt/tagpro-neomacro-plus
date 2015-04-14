@@ -60,7 +60,7 @@ fc_callout
 
 /* Flag carrier position in lane/area. */
 fc_callout_lane
-    : num %{
+    : number %{
         $$ = {
             type: "fc_position_lane",
             target: "enemy",
@@ -71,7 +71,7 @@ fc_callout_lane
 
 /* Powerup grab callout. */
 pup_grab_callout
-    : pronoun powerup dir number %{
+    : pronoun powerup dir time %{
         $$ = {
             type: "pup_grabbed",
             who: $1,
@@ -94,7 +94,7 @@ pup_respawn_callout
 
 /* Number of enemies in base. */
 own_base_status
-    : num %{
+    : number %{
         $$ = {
             type: "base_status",
             num: $1
@@ -123,12 +123,11 @@ dir
     ;
 
 /* For powerup times. */
-number
-    : number num {$$ = $1 + $2;}
-    | num {$$ = $1;}
+time
+    : number number {$$ = $1 + $2;}
     ;
 
-num
+number
     : NUMPAD_0 {$$ = getNumberValue(yytext);}
     | NUMPAD_1 {$$ = getNumberValue(yytext);}
     | NUMPAD_2 {$$ = getNumberValue(yytext);}

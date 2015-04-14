@@ -56,7 +56,7 @@ gulp.task("build-dev", ["jison-dev"], function() {
     .pipe(concat("macro.user.js"))
     .pipe(template({
       version: package_info.version,
-      parser: fileUrl("./dist/parser.js"),
+      parser: fileUrl("./debug/parser.js"),
       updateUrl: fileUrl("./debug/macro.user.js")
     }))
     .pipe(gulp.dest("./debug"));
