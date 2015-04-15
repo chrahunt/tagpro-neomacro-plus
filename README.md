@@ -7,7 +7,7 @@ TagPro Neomacro Plus
 
 That was the problem that Neomacro set out to fix, and this is a step in that same direction.
 
-Macros come in two flavors: simple and composite. A simple macro is one where the phrase we want to communicate stands on its own, we can't really break it down into separate parts. We can organize then into commands, questions, and other classes, but it doesn't make sense to break the sentence into smaller pieces. An example of a simple macro is:
+Macros come in two flavors: simple and composite. A simple macro is one where the phrase we want to communicate stands on its own, we can't really break it down into separate parts. We can organize them into commands, questions, and other classes, but it doesn't make sense to break the individual sentences into smaller pieces. An example of a simple macro is:
 
 > Chase the enemy FC
 
@@ -15,7 +15,7 @@ This contrasts with a composite macro. A composite macro is one where the phrase
 
 > Enemy FC is Top
 
-This kind of macro is necessary, but causes problems when we're forced to assign single keys to each version of the macro that we'd like the ability to communicate. This can mean lots of keys are taken up by only a handful of these composite macros, and it makes impossible more complex macros that have more than one or two variable parts. That's where TagPro Neomacro Plus can help. TNP treats macros how they were meant to be treated, as *sentences* composed of *parts*. With TNP you don't get "Enemy FC is Top", you get "Enemy FC is [direction]", where the direction is up to you! The benefit of a system like this becomes clear when multiple sentences can use the same buttons. This allows you to keep the majority of your keys free to be assigned to simple macros, but still have more communicative ability than you know what to do with.
+where instead of "Top" we may also want to use something like "Left" or "Bottom left". This kind of macro is necessary, but causes problems when we're forced to assign single keys to each version of the macro that we'd like the ability to communicate. This can mean lots of keys are taken up by only a handful of these composite macros, and it makes it impossible to have macros that have more than one or two variable parts. That's where TagPro Neomacro Plus can help. TNP treats macros how they were meant to be treated, as *sentences* composed of *parts*. With TNP you don't get "Enemy FC is Top", you get "Enemy FC is [direction]", where the direction is up to you! The benefit of a system like this becomes clear when multiple sentences can use the same buttons. This allows you to keep the majority of your keys free to be assigned to simple macros, but still have more communicative ability than you know what to do with.
 
 The library in its current state is a little opinionated about the layout and behavior needed for optimal use. Input requires a numpad. This doesn't help users that don't have a numpad, and may also cause problems for those that use arrow keys for navigation. This will likely change in the future, but for the moment it's necessary to keep things simple.
 
@@ -74,7 +74,7 @@ Throughout, keep in mind the numpad layout
 
 5. Enemies in base  
    Format: `-` `[number(1)]`  
-   Mnemonic: `-` because enemies in base is usually negative.  
+   Mnemonic: `-` because having enemies in base is usually negative.  
    **Example**  
    Input: `-` `2`  
    Output: "Number of enemies in base: 2"
@@ -101,7 +101,7 @@ This section specifies the parts as referenced in the sentences above. Where the
      * enemy - `8`: the ball away from/against you
 
 3. Powerups - `[powerup]`
-   Powerups are referenced using the keys across the top of the numpad. This one    isn't perfect, but it's alright.  
+   Powerups are referenced using the keys across the top of the numpad. This one isn't perfect, but it's alright.  
      * tagpro - `7`
      * juke juice - `8`
      * rolling bomb - `9`
@@ -112,6 +112,15 @@ This section specifies the parts as referenced in the sentences above. Where the
 
 5. Time - `[time]`
    Indicates a time (seconds). Equivalent to `[number(2)]`.
+
+### Other:
+
+Some useful information doesn't fall into the above categories above, so here it is.
+
+1. While entering a macro you can press any keys you want without having to restart the macro, as long as those keys you press aren't on the numpad.
+2. When a macro is completed, it is sent immediately to your teammates.
+3. You may have a delay of up to three seconds in-between consecutive keypresses for a macro. If you initiated the macro correctly (used one of the correct first keys to start a sentence), then you will see a message in chat letting you know that your time is up and to try again.
+4. If you press the wrong key and assuming the macro didn't get sent, you can press `.` on the numpad to reset the "macro memory". This won't help if you simply put the wrong number of enemies in base (`-` `3` instead of `2`) since the message will be sent immediately, but will if you need to correct a longer macro, such as the powerup callout.
 
 ## Compatibility
 
@@ -194,3 +203,5 @@ Formatting functions include:
 Using a different syntax for macros may be difficult. It is easy to incorporate a parser into the existing userscript. Just replace the `@resource` URL in the userscript header with one pointing to your generated parser.
 
 It is less easy to create the parser for a new macro syntax. Clone this project, create the grammar for your language according to the [jison](https://github.com/zaach/jison) specification, replace the existing `src/grammar.jison` file, then run `gulp` in the root directory of the project to create the userscript. Make sure to change the repo details in `package.json` to align with the Github repository that the parser will be uploaded to. This will be made easier in the future.
+
+As it is, there are some restrictions on the grammar for a macro syntax. There cannot be trailing optional parameters. This results from the fact that there will be some issues if a sentence in your grammar is a sub-expression of another valid sentence that you intend to be accessible. For this to be overcome there would need to be an ending marker on macro key sequences so the userscript would know when to send a key sequence to the parser, but at the moment this doesn't prohibit the grammar from being expressive enough.
