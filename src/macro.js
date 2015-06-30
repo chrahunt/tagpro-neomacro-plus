@@ -89,21 +89,16 @@ function validFirst(keyCode) {
 }
 
 var allowedKeys = {
-  "96": true,
-  "97": true,
-  "98": true,
-  "99": true,
-  "100": true,
-  "101": true,
-  "102": true,
-  "103": true,
-  "104": true,
-  "105": true,
-  "111": true,
-  "106": true,
-  "109": true,
-  "107": true,
-  "110": true
+  "90": true,
+  "65": true,
+  "83": true,
+  "68": true,
+  "81": true,
+  "87": true,
+  "69": true,
+  "49": true,
+  "56": true,
+  "57": true,
 };
 
 function validKey(keyCode) {
@@ -297,16 +292,15 @@ var Operations = {
   },
   dbl: function(val) {
     return val + val;
+  },
+  upcase: function(val) {
+    return val.toUpperCase();
   }
 };
 
 // Sentences that the parsed key strokes are placed into.
 var Templates = {
-  "fc_position": "{{loc|dir|dbl}} Enemy FC is {{loc|expand}} {{loc|dir|dbl}}",
-  "pup_grabbed": "{{who|expand|capitalize}} got {{what|expand}} on {{where|expand}} @ :{{when}}",
-  "fc_position_lane": "Enemy FC is {{lane}}.",
-  "pup_respawn": "{{where|expand|capitalize}} powerup is respawning soon.",
-  "base_status": "Number of enemies in base: {{num}}"
+  "pup_callout": "{{where|expand|upcase}} pup at {{when}}"
 };
 
 // Given text from within a replacement, parse it.
