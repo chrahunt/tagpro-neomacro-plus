@@ -9,12 +9,40 @@
 // @include       http://maptest*.newcompte.fr:*
 // @license       MIT
 // @author        snaps
-// @version       0.3.1
+// @version       0.4.0
 // @run-at        document-start
 // ==/UserScript==
 
 // Userscript functions.
 (function(window, document) {
+
+// Map symbols to key codes.
+// Edit this to change keys. Beware your changes won't persist if the
+// userscript updates.
+var keyMap = {
+  'NUM_0': "96",
+  'NUM_1': "97",
+  'NUM_2': "98",
+  'NUM_3': "99",
+  'NUM_4': "100",
+  'NUM_5': "101",
+  'NUM_6': "102",
+  'NUM_7': "103",
+  'NUM_8': "104",
+  'NUM_9': "105",
+  '/': "111",
+  '*': "106",
+  '-': "109",
+  '+': "107",
+  '.': "110"
+};
+
+// Reverse keyMap.
+var keyCodes = Object.keys(keyMap).reduce(function (keyCodes, symbol) {
+  var val = keyMap[symbol];
+  keyCodes[val] = symbol;
+  return keyCodes;
+}, {});
 
 // Run provided function when body is present.
 function runOnBody(fn) {
@@ -91,38 +119,14 @@ function parseMacro(str) {
   }
 }
 
-// TODO: Move these somewhere that makes more sense, and can be
-// generated without prior knowledge.
-var keyCodes = {
-  111: '/',
-  107: '+',
-  109: '-'
-};
-
 function validFirst(keyCode) {
   return Macro.firsts.indexOf(keyCodes[keyCode]) !== -1;
 }
 
-var allowedKeys = {
-  "96": true,
-  "97": true,
-  "98": true,
-  "99": true,
-  "100": true,
-  "101": true,
-  "102": true,
-  "103": true,
-  "104": true,
-  "105": true,
-  "111": true,
-  "106": true,
-  "109": true,
-  "107": true,
-  "110": true
-};
+var allowedKeys = Object.keys(keyCodes);
 
 function validKey(keyCode) {
-  return allowedKeys[keyCode];
+  return allowedKeys.indexOf(keyCode.toString()) !== -1;
 }
 
 function controlsDisabled() {
@@ -133,7 +137,7 @@ function controlsDisabled() {
 runOnTagpro(function() {
   tagpro.ready(function() {
     function keyNotInUse(k) {
-      return !allowedKeys[k];
+      return !validKey(k);
     }
     for (var key in tagpro.keys) {
       tagpro.keys[key] = tagpro.keys[key].filter(keyNotInUse);
@@ -166,7 +170,7 @@ var lastKey = 0;
 var keypressLimit = 3e3;
 
 // The . key on the numpad.
-var resetKey = 110;
+var resetKey = keyMap["."];
 
 // Keys pressed.
 var keys = [];
@@ -198,7 +202,7 @@ function keydownHandler(event) {
   event.preventDefault();
   event.stopPropagation();
 
-  keys.push(event.keyCode);
+  keys.push(keyCodes[event.keyCode]);
 
   // Parse already-pressed keys if no other keys come in.
   try {
@@ -319,6 +323,7 @@ var Operations = {
 var Templates = {
   "fc_position": "{{loc|dir|dbl}} Enemy FC is {{loc|expand}} {{loc|dir|dbl}}",
   "pup_grabbed": "{{who|expand|capitalize}} got {{what|expand}} on {{where|expand}} @ :{{when}}",
+  "pup_time": "{{where|expand}} powerup @ :{{when}}",
   "fc_position_lane": "Enemy FC is {{lane}}.",
   "pup_respawn": "{{where|expand|capitalize}} powerup is respawning soon.",
   "base_status": "Number of enemies in base: {{num}}"
