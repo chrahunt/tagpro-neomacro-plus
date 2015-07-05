@@ -61,9 +61,9 @@ Throughout, keep in mind the numpad layout
 
 3. Powerup grabs (short form)  
    Format: `+` `[direction]` `[time]`  
-   Mnemonic: Powerups give a "boost" to players and the order of the required items corresponds to the "Who", "What", "Where", "When" subset of the [Five Ws](http://en.wikipedia.org/wiki/Five_Ws).  
+   Mnemonic: Powerups give a "boost" to players and the order of the required items corresponds to the "Where" and "When" subset of the [Five Ws](http://en.wikipedia.org/wiki/Five_Ws).  
    **Example**  
-   Input: `+` `2` `8` `5` `23`  
+   Input: `+` `5` `23`  
    Output: "middle powerup @ :23."
 
 4. Powerup grabs (long form)  
