@@ -49,7 +49,7 @@ Throughout, keep in mind the numpad layout
    Format: `[direction]`  
    Mnemonic: None, this is just a quick way to indicate flag carrier position.  
    **Example**  
-   Input: `/` `2`  
+   Input: `2`  
    Output: "&#8659;&#8659; Enemy Flag carrier is bottom. &#8659;&#8659;"
 
 2. Enemy Flag Carrier Location (lane):  
@@ -220,7 +220,13 @@ Name: Grabbed powerup
 * who: pronoun
 * what: powerup
 * where: direction
-* when: number(1) or number(2)
+* when: number(2)
+
+Name: Powerup time
+
+* type: "pup_time"
+* where: direction
+* when: number(2)
 
 Name: Powerup respawn
 
