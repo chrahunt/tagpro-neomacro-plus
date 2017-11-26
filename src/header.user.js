@@ -10,5 +10,4 @@
 // @license       MIT
 // @author        snaps ; Ko
 // @version       <%= version %>
-// @run-at        document-start
 // ==/UserScript==

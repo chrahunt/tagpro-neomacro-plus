@@ -10,7 +10,6 @@
 // @license       MIT
 // @author        snaps ; Ko
 // @version       0.5.0
-// @run-at        document-start
 // ==/UserScript==
 
 // Userscript functions.
@@ -44,55 +43,24 @@ var keyCodes = Object.keys(keyMap).reduce(function (keyCodes, symbol) {
   return keyCodes;
 }, {});
 
-// Run provided function when body is present.
-function runOnBody(fn) {
-  if (document.body) {
-      fn();
-  } else {
-    setTimeout(function() {
-      runOnBody(fn);
-    }, 150);
-  }
+// This dummy input will handle macro keypresses
+var btn = document.createElement("input");
+btn.style.opacity = 0;
+btn.style.position = "absolute";
+btn.style.top = "-100px";
+btn.style.left = "-100px";
+btn.id = "macro-handler";
+document.body.appendChild(btn);
+
+btn.focus();
+btn.addEventListener('keydown', keydownHandler, false);
+document.addEventListener('keydown', documentKeydown, false);
+if (typeof tagpro !== 'undefined') tagpro.ready(function() {
+  // Additional delay is for compatibility with chat enhancer.
+  setTimeout(showInfo("TagPro Neomacro Plus Loaded!"),1000);
+}); else {
+  setTimeout(showInfo("TagPro Neomacro Plus Loaded!"),3000);
 }
-
-function runOnTagpro(fn, i=0) {
-  if (i > 100 || typeof tagpro !== 'undefined') {
-    try {fn();} catch(e){}
-  } else {
-    setTimeout(function() {
-      runOnTagpro(fn, i+1);
-    }, 10);
-  }
-}
-
-function runOnChat(fn, i=0) {
-  if (i > 100 || (typeof tagpro !== "undefined" && tagpro.playerId) ) {
-    // Additional delay is for compatibility with chat enhancer.
-    setTimeout(fn, 1000);
-  } else {
-    setTimeout(function() {
-        runOnChat(fn, i+1);
-    }, 10);
-  }
-}
-
-runOnBody(function() {
-  // This dummy input will handle macro keypresses
-  var btn = document.createElement("input");
-  btn.style.opacity = 0;
-  btn.style.position = "absolute";
-  btn.style.top = "-100px";
-  btn.style.left = "-100px";
-  btn.id = "macro-handler";
-  document.body.appendChild(btn);
-
-  btn.focus();
-  btn.addEventListener('keydown', keydownHandler, false);
-  document.addEventListener('keydown', documentKeydown, false);
-  runOnChat(function() {
-    showInfo("TagPro Neomacro Plus Loaded!");
-  });
-});
 
 // Checks for macro inputs associated with TagPro NeoMacro and
 // Watball's macro generator.
@@ -134,16 +102,18 @@ function controlsDisabled() {
 }
 
 // Prevent macro keys from impacting tagpro play.
-runOnTagpro(function() {
+if (typeof tagpro !== 'undefined') {
   tagpro.ready(function() {
-    function keyNotInUse(k) {
-      return !validKey(k);
-    }
-    for (var key in tagpro.keys) {
-      tagpro.keys[key] = tagpro.keys[key].filter(keyNotInUse);
-    }
+    tagpro.ready(function() {
+      function keyNotInUse(k) {
+        return !validKey(k);
+      }
+      for (var key in tagpro.keys) {
+        tagpro.keys[key] = tagpro.keys[key].filter(keyNotInUse);
+      }
+    });
   });
-});
+}
 
 function documentKeydown(event) {
   if (!controlsDisabled()) {
