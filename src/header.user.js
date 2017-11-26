@@ -8,7 +8,7 @@
 // @include       http://tagpro-*.koalabeast.com:*
 // @include       http://maptest*.newcompte.fr:*
 // @license       MIT
-// @author        snaps
+// @author        snaps ; Ko
 // @version       <%= version %>
 // @run-at        document-start
 // ==/UserScript==
