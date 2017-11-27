@@ -1,7 +1,7 @@
 TagPro Neomacro Plus
 ----------------
 
-**Want to get going? If you've got Greasemonkey/Tampermonkey installed, you can install the userscript [here](https://raw.githubusercontent.com/chrahunt/tagpro-neomacro-plus/master/dist/macro.user.js).**
+**Want to get going? If you've got Greasemonkey/Tampermonkey installed, you can install the userscript [here](https://raw.githubusercontent.com/wilcooo/tagpro-neomacro-plus/master/dist/macro.user.js).**
 
 > Are you tired of overly complex chat macro systems? Have you forgotten whether you bound "Yes" to I or U?
 
