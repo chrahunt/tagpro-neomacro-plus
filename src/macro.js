@@ -29,55 +29,24 @@ var keyCodes = Object.keys(keyMap).reduce(function (keyCodes, symbol) {
   return keyCodes;
 }, {});
 
-// Run provided function when body is present.
-function runOnBody(fn) {
-  if (document.body) {
-      fn();
-  } else {
-    setTimeout(function() {
-      runOnBody(fn);
-    }, 150);
-  }
+// This dummy input will handle macro keypresses
+var btn = document.createElement("input");
+btn.style.opacity = 0;
+btn.style.position = "absolute";
+btn.style.top = "-100px";
+btn.style.left = "-100px";
+btn.id = "macro-handler";
+document.body.appendChild(btn);
+
+btn.focus();
+btn.addEventListener('keydown', keydownHandler, false);
+document.addEventListener('keydown', documentKeydown, false);
+if (typeof tagpro !== 'undefined') tagpro.ready(function() {
+  // Additional delay is for compatibility with chat enhancer.
+  setTimeout(showInfo("TagPro Neomacro Plus Loaded!"),1000);
+}); else {
+  setTimeout(showInfo("TagPro Neomacro Plus Loaded!"),3000);
 }
-
-function runOnTagpro(fn) {
-  if (typeof tagpro !== 'undefined') {
-    fn();
-  } else {
-    setTimeout(function() {
-      runOnTagpro(fn);
-    }, 0);
-  }
-}
-
-function runOnChat(fn) {
-  if (typeof tagpro !== "undefined" && tagpro.playerId) {
-    // Additional delay is for compatibility with chat enhancer.
-    setTimeout(fn, 1000);
-  } else {
-    setTimeout(function() {
-        runOnChat(fn);
-    }, 0);
-  }
-}
-
-runOnBody(function() {
-  // This dummy input will handle macro keypresses
-  var btn = document.createElement("input");
-  btn.style.opacity = 0;
-  btn.style.position = "absolute";
-  btn.style.top = "-100px";
-  btn.style.left = "-100px";
-  btn.id = "macro-handler";
-  document.body.appendChild(btn);
-
-  btn.focus();
-  btn.addEventListener('keydown', keydownHandler, false);
-  document.addEventListener('keydown', documentKeydown, false);
-  runOnChat(function() {
-    showInfo("TagPro Neomacro Plus Loaded!");
-  });
-});
 
 // Checks for macro inputs associated with TagPro NeoMacro and
 // Watball's macro generator.
@@ -115,20 +84,22 @@ function validKey(keyCode) {
 }
 
 function controlsDisabled() {
-  return typeof tagpro !== "undefined" && tagpro.disableControls;
+  return $("input#chat").is(":visible");
 }
 
 // Prevent macro keys from impacting tagpro play.
-runOnTagpro(function() {
+if (typeof tagpro !== 'undefined') {
   tagpro.ready(function() {
-    function keyNotInUse(k) {
-      return !validKey(k);
-    }
-    for (var key in tagpro.keys) {
-      tagpro.keys[key] = tagpro.keys[key].filter(keyNotInUse);
-    }
+    tagpro.ready(function() {
+      function keyNotInUse(k) {
+        return !validKey(k);
+      }
+      for (var key in tagpro.keys) {
+        tagpro.keys[key] = tagpro.keys[key].filter(keyNotInUse);
+      }
+    });
   });
-});
+}
 
 function documentKeydown(event) {
   if (!controlsDisabled()) {
@@ -219,18 +190,42 @@ function keydownHandler(event) {
  */
 var lastMessage = 0;
 var messageLimit = 300;
+const teamChat  = 84; // T
+const allChat   = 13; // enter
+const groupChat = 71; // G
+const sendChat  = 13; // enter
+var e = $.Event('keydown');
 function chat(chatMessage, group) {
   if (typeof group == "undefined") group = false;
   var now = Date.now();
   var timeDiff = now - lastMessage;
   if (timeDiff > messageLimit) {
-    if (!group) {
-      tagpro.socket.emit("chat", {
-        message: chatMessage.text,
-        toAll: chatMessage.global
-      });
+    if (typeof tagpro !== 'undefined') {
+      if (!group) {
+        tagpro.socket.emit("chat", {
+          message: chatMessage.text,
+          toAll: chatMessage.global
+        });
+      } else {
+        tagpro.group.socket.emit("chat", chatMessage);
+      }
     } else {
-      tagpro.group.socket.emit("chat", chatMessage);
+      // Blur (unfocus)  the 'name' input box, if you are in the middle of changing your name
+      if ( $("#name").is(":focus") ) $("#name").blur();
+
+      // Open the chatbox, if it isn't already
+      if ( !$("input#chat").is(":visible") ) {
+        if (group) e.keyCode = groupChat;
+        else       e.keyCode = chatMessage.global ? allChat : teamChat;
+        $(document).trigger(e);
+      }
+
+      // enter the message
+      $("input#chat").val(chatMessage.text);
+
+      // send the message
+      e.keyCode = sendChat;
+      $(document).trigger(e);
     }
     lastMessage = Date.now();
   } else if (timeDiff >= 0) {
@@ -249,6 +244,16 @@ function showInfo(message) {
       from: null,
       message: "TNP: " + message
     });
+  } else {
+    var chat = $("<div><span class='message'></span></div>").clone();
+    chat.text("TNP: " + message);
+    $("div#chatHistory").append(chat).scrollTop($("div#chatHistory").get(0).scrollHeight);
+    setTimeout(function() {
+        chat.remove();
+    }, 2e4);
+    if ( ! $("div#chatHistory").is(':visible') ) {
+      console.warn("TNP: Cannot show info. You are probably using a script that replaces the default chat.\n\n" + message);
+    }
   }
 }
 

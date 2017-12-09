@@ -1,7 +1,7 @@
 {
   "name": "tagpro-neomacro-plus",
-  "version": "0.4.0",
-  "description": "Better macros for the game TagPro.",
+  "version": "0.5.0",
+  "description": "Better macros for the game TagPro. (No-Script proof)",
   "directories": {
     "test": "test"
   },
@@ -24,6 +24,7 @@
     "userscript"
   ],
   "author": "Chris Hunt <chrahunt@gmail.com>",
+  "contributors": "Ko (https://www.reddit.com/message/compose/?to=Wilcooo)",
   "license": "MIT",
   "repository": "chrahunt/tagpro-neomacro-plus"
 }
